@@ -25,9 +25,14 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<User> findById(Long id) {
-        log.info("User with ID {} was found.", id);
         User user = users.get(id);
-        return user == null ? Optional.empty() : Optional.of(user);
+        if (user == null) {
+            log.info("User with ID {} was not found.", id);
+            return Optional.empty();
+        } else {
+            log.info("User with ID {} was found.", id);
+            return Optional.of(user);
+        }
     }
 
     @Override
