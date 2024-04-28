@@ -12,7 +12,6 @@ import ru.practicum.shareit.user.repository.UserRepository;
 import java.util.List;
 import java.util.Optional;
 
-import static java.util.stream.Collectors.toList;
 import static ru.practicum.shareit.user.dto.UserMapper.toUser;
 import static ru.practicum.shareit.user.dto.UserMapper.toUserDto;
 
