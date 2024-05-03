@@ -26,7 +26,6 @@ import static ru.practicum.shareit.booking.dto.BookingMapper.toBookingDto;
 import static ru.practicum.shareit.booking.model.BookingStatus.*;
 
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
@@ -124,8 +123,7 @@ public class BookingServiceImpl implements BookingService {
         return bookingDtoList.stream().map(BookingMapper::toBookingDto).collect(Collectors.toList());
     }
 
-    @Override
-    public List<BookingDto> getAllByUser(Long userId, String state) {
+    public List<BookingDto> getAllByUserAndState(Long userId, String state) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Not found Bookings - " +
                         "Not found User with Id " + userId));

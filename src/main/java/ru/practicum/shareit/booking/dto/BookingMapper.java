@@ -7,14 +7,28 @@ import ru.practicum.shareit.booking.model.Booking;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BookingMapper {
     public static BookingDto toBookingDto(Booking booking) {
-        return BookingDto.builder()
+        if (booking == null) {
+            return null;
+        }
+
+        BookingDto bookingDto = BookingDto.builder()
                 .id(booking.getId())
                 .start(booking.getStart())
                 .end(booking.getEnd())
-                .booker(new BookingDto.Booker(booking.getBooker().getId(), booking.getBooker().getName()))
                 .status(booking.getStatus())
-                .item(new BookingDto.Item(booking.getItem().getId(), booking.getItem().getName()))
                 .build();
+
+        if (booking.getBooker() != null) {
+            BookingDto.Booker booker = bookingDto.new Booker(booking.getBooker().getId(), booking.getBooker().getName());
+            bookingDto.setBooker(booker);
+        }
+
+        if (booking.getItem() != null) {
+            BookingDto.Item item = bookingDto.new Item(booking.getItem().getId(), booking.getItem().getName());
+            bookingDto.setItem(item);
+        }
+
+        return bookingDto;
     }
 
     public static Booking toBooking(BookingShortDto bookingShortDto) {

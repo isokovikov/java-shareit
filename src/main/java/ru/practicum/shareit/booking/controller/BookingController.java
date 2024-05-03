@@ -51,7 +51,7 @@ public class BookingController {
     public List<BookingDto> getAllByUser(@RequestHeader("X-Sharer-User-Id") Long userId,
                                          @RequestParam(defaultValue = "ALL") String state) {
         log.info("GET:/bookings request received with parameters: userId = {}, state = {}", userId, state);
-        return bookingService.getAllByUser(userId, state);
+        return bookingService.getAllByUserAndState(userId, state);
     }
 
     @GetMapping("/{bookingId}")
