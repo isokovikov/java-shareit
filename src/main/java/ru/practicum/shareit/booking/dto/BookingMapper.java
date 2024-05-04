@@ -32,27 +32,46 @@ public class BookingMapper {
     }
 
     public static Booking toBooking(BookingShortDto bookingShortDto) {
+        if (bookingShortDto == null) {
+            return null;  // Или выбросить исключение, в зависимости от контекста использования
+        }
+
+        if (bookingShortDto.getStart() == null || bookingShortDto.getEnd() == null) {
+            throw new IllegalArgumentException("Start and end dates must not be null");
+        }
+
         return Booking.builder()
-                .id(bookingShortDto.getId())
+                .id(bookingShortDto.getId())  // Убедитесь, что ID может быть null, если это новое бронирование
                 .start(bookingShortDto.getStart())
                 .end(bookingShortDto.getEnd())
                 .build();
     }
 
     public static BookingShortDto toBookingShortDto(Booking booking) {
+        if (booking == null) {
+            return null;
+        }
+        Long itemId = booking.getItem() != null ? booking.getItem().getId() : null; // Безопасный доступ к ID
+
         return BookingShortDto.builder()
                 .id(booking.getId())
-                .itemId(booking.getItem().getId())
+                .itemId(itemId)
                 .start(booking.getStart())
                 .end(booking.getEnd())
                 .build();
     }
 
     public static BookingForItemDto toBookingForItemDto(Booking booking) {
+        if (booking == null) {
+            return null;
+        }
+        Long bookerId = booking.getBooker() != null ? booking.getBooker().getId() : null;
+        Long itemId = booking.getItem() != null ? booking.getItem().getId() : null;
+
         return BookingForItemDto.builder()
                 .id(booking.getId())
-                .bookerId(booking.getBooker().getId())
-                .itemId(booking.getItem().getId())
+                .bookerId(bookerId)
+                .itemId(itemId)
                 .start(booking.getStart())
                 .end(booking.getEnd())
                 .build();
