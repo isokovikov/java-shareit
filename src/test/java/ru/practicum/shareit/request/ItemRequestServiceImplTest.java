@@ -94,7 +94,7 @@ class ItemRequestServiceImplTest {
 
         assertThrows(NotFoundException.class, () -> itemRequestService.getAllByRequester(userId, 0, 10));
 
-        Mockito.verify(itemRequestRepository, Mockito.never()).findAllByUserId(Mockito.anyLong(), Mockito.any());
+        Mockito.verify(itemRequestRepository, Mockito.never()).findAllByRequesterIdNot(Mockito.anyLong(), Mockito.any());
     }
 
     @Test
@@ -127,7 +127,7 @@ class ItemRequestServiceImplTest {
 
         assertThrows(NotFoundException.class, () -> itemRequestService.getAll(userId, 0, 10));
 
-        Mockito.verify(itemRequestRepository, Mockito.never()).findAllByUserId(Mockito.anyLong(), Mockito.any());
+        Mockito.verify(itemRequestRepository, Mockito.never()).findAllByRequesterIdNot(Mockito.anyLong(), Mockito.any());
     }
 
     @Test

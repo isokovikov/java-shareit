@@ -16,6 +16,7 @@ import ru.practicum.shareit.request.dto.ItemRequestDtoShort;
 import ru.practicum.shareit.request.dto.ItemRequestMapper;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.request.repository.ItemRequestRepository;
+import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.util.ArrayList;
@@ -38,17 +39,21 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     @Transactional
     @Override
     public ItemRequestDto create(Long userId, ItemRequestDtoShort itemRequestDtoShort) {
+        // Сначала проверяем наличие пользователя
+        User requester = userRepository.findById(userId).orElseThrow(
+                () -> new NotFoundException("Not found User with Id:" + userId));
+
+        // Теперь, когда мы уверены, что пользователь существует, создаем запрос
         ItemRequest itemRequest = ItemRequestMapper.toItemRequest(itemRequestDtoShort);
+        itemRequest.setRequester(requester);
 
-        itemRequest.setRequester(userRepository.findById(userId).orElseThrow(
-                () -> new NotFoundException("Not found User with Id:" + userId)));
-
+        // Сохраняем объект запроса
         itemRequestRepository.save(itemRequest);
 
+        // Возвращаем DTO созданного запроса
         return ItemRequestMapper.toDto(itemRequest);
     }
 
-    @Transactional(readOnly = true)
     @Override
     public ItemRequestDto getById(Long userId, Long requestId) {
         if (!userRepository.existsById(userId)) {
