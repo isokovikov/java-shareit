@@ -20,6 +20,7 @@ import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.request.repository.ItemRequestRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
@@ -50,6 +51,8 @@ public class ItemServiceImpl implements ItemService {
     private final BookingRepository bookingRepository;
 
     private final CommentRepository commentRepository;
+
+    private final ItemRequestRepository itemRequestRepository;
 
     @Override
     public List<ItemDto> getAll(Long userId) {
@@ -92,6 +95,12 @@ public class ItemServiceImpl implements ItemService {
                         "Not Found User with Id: " + userId));
         Item item = toItem(itemShortDto);
         item.setOwner(user);
+        Long requestId = itemShortDto.getRequestId();
+
+        if (requestId != null) {
+            item.setRequest(itemRequestRepository.findById(requestId)
+                    .orElseThrow(() -> new NotFoundException("Not found Request with Id:" + requestId)));
+        }
         itemRepository.save(item);
 
         return toItemDto(item);

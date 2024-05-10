@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ItemMapper {
@@ -15,6 +17,7 @@ public class ItemMapper {
                 .description(item.getDescription())
                 .available(item.getAvailable())
                 .comments(new ArrayList<>())
+                .requestId((item.getRequest() == null ? null : item.getRequest().getId()))
                 .build();
     }
 
@@ -34,5 +37,13 @@ public class ItemMapper {
                 .description(itemShortDto.getDescription())
                 .available(itemShortDto.getAvailable())
                 .build();
+    }
+
+    public static List<ItemDto> toDtoShortList(List<Item> items) {
+        if (items != null) {
+            return items.stream().map(ItemMapper::toItemDto).collect(Collectors.toList());
+        } else {
+            return List.of();
+        }
     }
 }
