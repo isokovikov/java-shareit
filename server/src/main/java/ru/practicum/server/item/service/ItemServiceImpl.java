@@ -26,6 +26,7 @@ import ru.practicum.server.user.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -59,6 +60,7 @@ public class ItemServiceImpl implements ItemService {
         List<Item> items = itemRepository.findAllByOwnerId(userId);
         List<ItemDto> itemDtoList = items.stream().map(ItemMapper::toItemDto).collect(toList());
         List<Long> idItems = itemDtoList.stream().map(ItemDto::getId).collect(Collectors.toList());
+        Collections.sort(idItems);
         getAllBookingsByItem(itemDtoList, idItems);
 
         Map<Long, List<CommentDto>> comments = commentRepository.findByItemIdIn(idItems, Sort.by(DESC, "created"))
