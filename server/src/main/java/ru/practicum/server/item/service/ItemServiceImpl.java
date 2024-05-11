@@ -57,7 +57,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDto> getAll(Long userId) {
-        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        Sort sort = Sort.by(Sort.Direction.ASC, "id");
         List<Item> items = itemRepository.findAllByOwnerId(userId, sort);
 
         List<ItemDto> itemDtoList = items.stream()
