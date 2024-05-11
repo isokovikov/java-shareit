@@ -66,7 +66,6 @@ public class ItemServiceImpl implements ItemService {
         //получаем id элементов для загрузки комментов
         List<Long> idItems = itemDtoList.stream()
                 .map(ItemDto::getId)
-                .sorted()
                 .collect(Collectors.toList());
         //загружаем бронирования
         getAllBookingsByItem(itemDtoList, idItems);
