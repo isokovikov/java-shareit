@@ -27,6 +27,7 @@ import ru.practicum.server.user.repository.UserRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -34,7 +35,7 @@ import java.util.stream.Collectors;
 
 import static java.time.LocalDateTime.now;
 import static java.util.stream.Collectors.toList;
-import static org.springframework.data.domain.Sort.Direction.ASC;
+import static org.springframework.data.domain.Sort.Direction.DESC;
 import static ru.practicum.server.booking.model.BookingStatus.APPROVED;
 import static ru.practicum.server.item.dto.CommentMapper.toComment;
 import static ru.practicum.server.item.dto.CommentMapper.toCommentDto;
@@ -60,6 +61,7 @@ public class ItemServiceImpl implements ItemService {
         List<Item> items = itemRepository.findAllByOwnerId(userId);
         List<ItemDto> itemDtoList = items.stream()
                 .map(ItemMapper::toItemDto)
+                .sorted(Comparator.comparingLong(ItemDto::getId).reversed())
                 .collect(toList());
         //получаем id элементов для загрузки комментов
         List<Long> idItems = itemDtoList.stream()
@@ -69,7 +71,7 @@ public class ItemServiceImpl implements ItemService {
         //загружаем бронирования
         getAllBookingsByItem(itemDtoList, idItems);
 
-        Map<Long, List<CommentDto>> comments = commentRepository.findByItemIdIn(idItems, Sort.by(ASC, "created"))
+        Map<Long, List<CommentDto>> comments = commentRepository.findByItemIdIn(idItems, Sort.by(DESC, "created"))
                 .stream()
                 .map(CommentMapper::toCommentDto)
                 .collect(Collectors.groupingBy(CommentDto::getId));
