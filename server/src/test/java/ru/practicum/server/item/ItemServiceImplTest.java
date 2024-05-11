@@ -99,7 +99,7 @@ class ItemServiceImplTest {
 
         Long userId = 1L;
         List<Item> page = List.of(item);
-        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        Sort sort = Sort.by(Sort.Direction.ASC, "id");
 
         Mockito.when(itemRepository.findAllByOwnerId(user.getId(), sort)).thenReturn(page);
 
