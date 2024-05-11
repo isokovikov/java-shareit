@@ -60,14 +60,14 @@ public class ItemServiceImpl implements ItemService {
         List<Item> items = itemRepository.findAllByOwnerId(userId);
         List<ItemDto> itemDtoList = items.stream().map(ItemMapper::toItemDto).collect(toList());
         List<Long> idItems = itemDtoList.stream().map(ItemDto::getId).sorted().collect(Collectors.toList());
-        getAllBookingsByItem(itemDtoList, idItems);
+        //getAllBookingsByItem(itemDtoList, idItems);
 
         Map<Long, List<CommentDto>> comments = commentRepository.findByItemIdIn(idItems, Sort.by(DESC, "created"))
                 .stream()
                 .map(CommentMapper::toCommentDto)
                 .collect(Collectors.groupingBy(CommentDto::getId));
         itemDtoList.forEach(i -> i.setComments(comments.get(i.getId())));
-        Collections.reverse(itemDtoList);
+        //Collections.reverse(itemDtoList);
         return itemDtoList;
     }
 
