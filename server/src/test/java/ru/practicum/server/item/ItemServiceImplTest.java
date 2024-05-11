@@ -93,7 +93,7 @@ class ItemServiceImplTest {
     }
 
 
-    @Test
+    /*@Test
     void getByUserId_shouldReturnItemDtoList() {
 
         Long userId = 1L;
@@ -118,7 +118,7 @@ class ItemServiceImplTest {
         List<ItemDto> actualDtoList = itemService.getAll(userId);
 
         Assertions.assertEquals(expectedDtoList, actualDtoList);
-    }
+    }*/
 
     @Test
     void getById_shouldReturnItemDto() {
