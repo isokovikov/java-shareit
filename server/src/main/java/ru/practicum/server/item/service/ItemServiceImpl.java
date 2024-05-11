@@ -59,6 +59,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemDto> getAll(Long userId) {
         List<Item> items = itemRepository.findAllByOwnerId(userId);
+        Collections.reverse(items);
         List<ItemDto> itemDtoList = items.stream()
                 .map(ItemMapper::toItemDto)
                 .sorted(Comparator.comparingLong(ItemDto::getId).reversed())
