@@ -57,8 +57,9 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDto> getAll(Long userId) {
-        List<Item> items = itemRepository.findAllByOwnerId(userId);
-        Collections.reverse(items);
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        List<Item> items = itemRepository.findAllByOwnerId(userId, sort);
+
         List<ItemDto> itemDtoList = items.stream()
                 .map(ItemMapper::toItemDto)
                 .collect(toList());
@@ -75,8 +76,6 @@ public class ItemServiceImpl implements ItemService {
                 .collect(Collectors.groupingBy(CommentDto::getId));
 
         itemDtoList.forEach(i -> i.setComments(comments.getOrDefault(i.getId(), Collections.emptyList())));
-
-        //Collections.reverse(itemDtoList);
 
         return itemDtoList;
     }

@@ -1,5 +1,6 @@
 package ru.practicum.server.item;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -7,6 +8,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Sort;
+import ru.practicum.server.booking.dto.BookingMapper;
 import ru.practicum.server.booking.model.Booking;
 import ru.practicum.server.booking.model.BookingStatus;
 import ru.practicum.server.booking.repository.BookingRepository;
@@ -91,13 +94,14 @@ class ItemServiceImplTest {
     }
 
 
-    /*@Test
+    @Test
     void getByUserId_shouldReturnItemDtoList() {
 
         Long userId = 1L;
         List<Item> page = List.of(item);
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
 
-        Mockito.when(itemRepository.findAllByOwnerId(user.getId())).thenReturn(page);
+        Mockito.when(itemRepository.findAllByOwnerId(user.getId(), sort)).thenReturn(page);
 
         Mockito.when(bookingRepository.findFirstByItemIdInAndStartLessThanEqualAndStatus(Mockito.any(),
                 Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(Optional.of(booking));
@@ -116,7 +120,7 @@ class ItemServiceImplTest {
         List<ItemDto> actualDtoList = itemService.getAll(userId);
 
         Assertions.assertEquals(expectedDtoList, actualDtoList);
-    }*/
+    }
 
     @Test
     void getById_shouldReturnItemDto() {
