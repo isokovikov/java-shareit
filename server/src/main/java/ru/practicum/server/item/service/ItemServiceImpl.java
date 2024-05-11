@@ -26,6 +26,7 @@ import ru.practicum.server.user.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -33,6 +34,7 @@ import java.util.stream.Collectors;
 
 import static java.time.LocalDateTime.now;
 import static java.util.stream.Collectors.toList;
+import static org.springframework.data.domain.Sort.Direction.ASC;
 import static org.springframework.data.domain.Sort.Direction.DESC;
 import static ru.practicum.server.booking.model.BookingStatus.APPROVED;
 import static ru.practicum.server.item.dto.CommentMapper.toComment;
@@ -57,16 +59,26 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemDto> getAll(Long userId) {
         List<Item> items = itemRepository.findAllByOwnerId(userId);
-        List<ItemDto> itemDtoList = items.stream().map(ItemMapper::toItemDto).collect(toList());
-        List<Long> idItems = itemDtoList.stream().map(ItemDto::getId).sorted().collect(Collectors.toList());
-        //getAllBookingsByItem(itemDtoList, idItems);
+        List<ItemDto> itemDtoList = items.stream()
+                .map(ItemMapper::toItemDto)
+                .collect(toList());
+        //получаем id элементов для загрузки комментов
+        List<Long> idItems = itemDtoList.stream()
+                .map(ItemDto::getId)
+                .sorted()
+                .collect(Collectors.toList());
+        //загружаем бронирования
+        getAllBookingsByItem(itemDtoList, idItems);
 
-        Map<Long, List<CommentDto>> comments = commentRepository.findByItemIdIn(idItems, Sort.by(DESC, "created"))
+        Map<Long, List<CommentDto>> comments = commentRepository.findByItemIdIn(idItems, Sort.by(ASC, "created"))
                 .stream()
                 .map(CommentMapper::toCommentDto)
                 .collect(Collectors.groupingBy(CommentDto::getId));
-        itemDtoList.forEach(i -> i.setComments(comments.get(i.getId())));
+
+        itemDtoList.forEach(i -> i.setComments(comments.getOrDefault(i.getId(), Collections.emptyList())));
+
         //Collections.reverse(itemDtoList);
+
         return itemDtoList;
     }
 
