@@ -27,7 +27,6 @@ import ru.practicum.server.user.repository.UserRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -62,7 +61,6 @@ public class ItemServiceImpl implements ItemService {
         Collections.reverse(items);
         List<ItemDto> itemDtoList = items.stream()
                 .map(ItemMapper::toItemDto)
-                .sorted(Comparator.comparingLong(ItemDto::getId).reversed())
                 .collect(toList());
         //получаем id элементов для загрузки комментов
         List<Long> idItems = itemDtoList.stream()
