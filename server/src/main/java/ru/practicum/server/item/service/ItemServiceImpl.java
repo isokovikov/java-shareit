@@ -59,8 +59,7 @@ public class ItemServiceImpl implements ItemService {
     public List<ItemDto> getAll(Long userId) {
         List<Item> items = itemRepository.findAllByOwnerId(userId);
         List<ItemDto> itemDtoList = items.stream().map(ItemMapper::toItemDto).collect(toList());
-        List<Long> idItems = itemDtoList.stream().map(ItemDto::getId).collect(Collectors.toList());
-        Collections.sort(idItems);
+        List<Long> idItems = itemDtoList.stream().map(ItemDto::getId).sorted().collect(Collectors.toList());
         getAllBookingsByItem(itemDtoList, idItems);
 
         Map<Long, List<CommentDto>> comments = commentRepository.findByItemIdIn(idItems, Sort.by(DESC, "created"))
@@ -68,7 +67,7 @@ public class ItemServiceImpl implements ItemService {
                 .map(CommentMapper::toCommentDto)
                 .collect(Collectors.groupingBy(CommentDto::getId));
         itemDtoList.forEach(i -> i.setComments(comments.get(i.getId())));
-
+        Collections.reverse(itemDtoList);
         return itemDtoList;
     }
 
