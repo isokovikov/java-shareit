@@ -35,7 +35,6 @@ import java.util.stream.Collectors;
 import static java.time.LocalDateTime.now;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.data.domain.Sort.Direction.ASC;
-import static org.springframework.data.domain.Sort.Direction.DESC;
 import static ru.practicum.server.booking.model.BookingStatus.APPROVED;
 import static ru.practicum.server.item.dto.CommentMapper.toComment;
 import static ru.practicum.server.item.dto.CommentMapper.toCommentDto;
