@@ -2,20 +2,34 @@ package ru.practicum.gateway.booking.dto;
 
 import java.util.Optional;
 
+/**
+ * Состояния бронирования.
+ */
 public enum BookingState {
-    // Все
+    /** Все бронирования. */
     ALL,
-    // Текущие
+
+    /** Текущие бронирования. */
     CURRENT,
-    // Будущие
+
+    /** Будущие бронирования. */
     FUTURE,
-    // Завершенные
+
+    /** Завершенные бронирования. */
     PAST,
-    // Отклоненные
+
+    /** Отклоненные бронирования. */
     REJECTED,
-    // Ожидающие подтверждения
+
+    /** Бронирования, ожидающие подтверждения. */
     WAITING;
 
+    /**
+     * Конвертирует строку в соответствующее состояние бронирования.
+     *
+     * @param stringState строковое представление состояния
+     * @return {@link Optional} объект {@link BookingState}, если существует, иначе пустой
+     */
     public static Optional<BookingState> from(String stringState) {
         for (BookingState state : values()) {
             if (state.name().equalsIgnoreCase(stringState)) {
